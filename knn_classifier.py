@@ -87,7 +87,6 @@ accuracy_values = []
 def get_best_k(full_dataset):
 
     for k in range(1, 31):
-        print(len(full_dataset))
         accuracy = ten_fold_cross_validation(full_dataset, num_neighbours=k)
         print('At k = %d Accuracy = %.2f' % (k, accuracy))
         k_values.append(k)
@@ -100,9 +99,22 @@ def get_best_k(full_dataset):
 
 
 def plot_accuracy():
-    plt.plot(k_values, accuracy_values, '.-')
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    line, = ax.plot(k_values, accuracy_values,)
+
+    ymax = max(accuracy_values)
+    xpos = accuracy_values.index(ymax)
+    xmax = k_values[xpos]
+
+    ax.annotate('max at k = %d with %.2f acc' % (xmax, ymax), xy=(xmax, ymax), xytext=(xmax + 3, ymax + 1),
+                arrowprops=dict(facecolor='black', shrink=0.05),
+                )
+
     plt.xlabel('k')
-    plt.ylabel('Accuracy')
+    plt.ylabel('Accuracy(%)')
+    plt.title('Test accuracy vs k')
     plt.show()
     plt.savefig("output.png")
 
