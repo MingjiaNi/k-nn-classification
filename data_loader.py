@@ -1,9 +1,9 @@
 import pandas as pd
-from functools import reduce
+
 
 class DataLoader:
     """
-    Class that helps in loading dataset. Assumes attributes and labels are in seperate file
+    Class that helps in loading dataset. Assumes attributes and labels are in separate file
     """
 
     num_files = 10
@@ -11,9 +11,9 @@ class DataLoader:
     @classmethod
     def load_dataset(cls, attributes_file, labels_file):
         """
-        :param attributes_file: file path of attributes
-        :param labels_file: file path of correspnding labels
-        :return a 2-tuple of dataframes of attributes and labels
+        :param attributes_file: file path of attributes file
+        :param labels_file: file path of corresponding labels file
+        :return a 2-tuple of pandas dataframes of (attributes, labels)
         Loads data from single attributes, labels file pair
         """
 
@@ -30,7 +30,7 @@ class DataLoader:
     def load_full_dataset(cls, dataset_root_directory):
         """
         :param dataset_root_directory: root directory containing all dataset files
-        :return a list of 2-tuples of dataframes of attributes and labels
+        :return a list of 2-tuples (attributes, labels) of dataframes
         Loads data from a collection of files
         """
 
@@ -45,6 +45,13 @@ class DataLoader:
 
     @classmethod
     def load_with_test_data(cls, dataset_root_directory, split_ratio=0.1):
+        """
+        :param dataset_root_directory: root directory containing all dataset files
+        :param split_ratio: The ratio of test_data from the training data
+        :return: a 3-tuple (train data list, test set attributes, test set true labels)
+
+            Used when we need to take a portion of train data for testing
+        """
 
         if not 0 < split_ratio < 1:
             raise ValueError('Split ratio should be in (0,1)')

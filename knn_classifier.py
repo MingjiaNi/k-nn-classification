@@ -6,17 +6,28 @@ import pandas as pd
 
 
 class KNearestNeighbours:
+    """
+     model class for K Nearest Neighbours Classification
+    """
 
     def __init__(self):
         self.max_k = 30
-        self.best_k = None
+        self.best_k = None  # Learned by the system or passed as input by the user
         self.best_acc = None
+
+        # For plotting
         self.k_values = []
         self.accuracy_values = []
+
+        # For optimizing the distance calculation and finding K Nearest neighbors
         self.distance_cache = {}
         self.k_neighbours = {}
 
+
     def get_euclidean_distance(self, x1, x2):
+        """
+            Calculates the Euclidean distance between 2 vectors and caches the distance
+        """
 
         if np.array_equal(x1, x2):
             return 0.0
@@ -28,7 +39,7 @@ class KNearestNeighbours:
 
     def learn(self, full_dataset, k=None, verbose=False):
 
-        # If k is not provided then k is learned
+        # If k is not provided then k is learned by the model
         if k is None:
             self.best_k, self.best_acc = self.learn_best_k(full_dataset, verbose=verbose)
 
@@ -38,6 +49,8 @@ class KNearestNeighbours:
             each subset is 2-tuple of attributes and corresponding labels
         :param predict: a single data-point whose k nearest neighbors must be determined
         :param k: number of neighbors
+
+        This method is only called if K is not passed by the user and has to learned by the model
         """
         row_key = tuple(predict)
         if row_key not in self.k_neighbours:
@@ -155,10 +168,5 @@ class KNearestNeighbours:
 if __name__ == '__main__':
     dataset = DataLoader.load_full_dataset('./knn-dataset')
     model = KNearestNeighbours()
-    predictions, acc = model.classify(dataset[:-1], dataset[-1][0], true_values=dataset[-1][1])
-    #print(predictions)
-    print(acc)
-    #print(ten_fold_cross_validation(dataset))
-
     print(model.learn_best_k(dataset, verbose=True))
     model.plot_accuracy()
